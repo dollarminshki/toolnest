@@ -198,6 +198,98 @@
 
       empty.hidden = visible !== 0;
     });
+    
+function openTool(name) {
+  const modal = document.getElementById('toolModal');
+  const calculator = document.getElementById('calculator');
+
+  if (name === 'calculator') {
+    document.getElementById('modalTitle').textContent = '🧮 Calculator';
+    calculator.style.display = 'block';
+    calcClear();
+    modal.style.display = 'flex';
+  }
+}
+
+function closeTool() {
+  document.getElementById('toolModal').style.display = 'none';
+}
+
+let calcExpression = '';
+let calcFinished = false;
+
+function calcUpdate() {
+  document.getElementById('calcDisplay').value =
+    calcExpression || '0';
+}
+
+function calcInput(value) {
+  const operators = ['+', '-', '*', '/', '%'];
+
+  if (calcFinished && !operators.includes(value)) {
+    calcExpression = '';
+  }
+  calcFinished = false;
+
+  if (operators.includes(value)) {
+    if (!calcExpression) {
+      if (value !== '-') return;
+    } else if (operators.includes(calcExpression.slice(-1))) {
+      calcExpression = calcExpression.slice(0, -1);
+    }
+  }
+
+  if (value === '.') {
+    const current = calcExpression.split(/[+\-*/%]/).pop();
+    if (current.includes('.')) return;
+  }
+
+  if (calcExpression.length >= 40) return;
+
+  calcExpression += value;
+  calcUpdate();
+}
+
+function calcClear() {
+  calcExpression = '';
+  calcFinished = false;
+  calcUpdate();
+}
+
+function calcDelete() {
+  calcExpression = calcExpression.slice(0, -1);
+  calcFinished = false;
+  calcUpdate();
+}
+
+function calcAnswer() {
+  if (!calcExpression) return;
+
+  try {
+    if (!/^[0-9+\-*/%.() ]+$/.test(calcExpression)) {
+      throw new Error('Invalid expression');
+    }
+
+    const result = Function(
+      '"use strict"; return (' + calcExpression + ')'
+    )();
+
+    if (!Number.isFinite(result)) {
+      throw new Error('Invalid result');
+    }
+
+    calcExpression = String(
+      Math.round((result + Number.EPSILON) * 1e10) / 1e10
+    );
+    calcFinished = true;
+    calcUpdate();
+  } catch {
+    document.getElementById('calcDisplay').value = 'Invalid calculation';
+    calcExpression = '';
+    calcFinished = true;
+  }
+}
+
   </script>
 </body>
 </html>
