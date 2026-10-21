@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ToolNest offers free, simple online tools for everyday tasks.">
+  <title>ToolNest | Free Online Tools</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      color: #20213a;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e8e9f2;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 25px; font-weight: 800; color: #6954e8; }
+    header a { color: #55546d; text-decoration: none; }
+    .hero {
+      text-align: center;
+      padding: 65px 20px 45px;
+      background: linear-gradient(135deg, #eeebff, #f9f8ff);
+    }
+    .hero h1 { font-size: clamp(32px, 6vw, 54px); margin: 0 0 15px; }
+    .hero p { color: #696980; font-size: 17px; line-height: 1.6; }
+    .search {
+      display: block;
+      width: min(100%, 500px);
+      margin: 25px auto 0;
+      padding: 15px 18px;
+      border: 1px solid #dedaf8;
+      border-radius: 12px;
+      font-size: 16px;
+      outline-color: #6954e8;
+    }
+    main { max-width: 1100px; margin: auto; padding: 40px 20px 65px; }
+    .section-title { margin-bottom: 8px; font-size: 27px; }
+    .intro { color: #73738b; margin-bottom: 25px; }
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .tool {
+      background: white;
+      border: 1px solid #e8e8f1;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 5px 20px #26204408;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .tool:hover { transform: translateY(-4px); box-shadow: 0 10px 25px #26204412; }
+    .tool-icon { font-size: 32px; }
+    .tool h3 { margin: 15px 0 8px; }
+    .tool p { color: #77778c; line-height: 1.5; font-size: 14px; }
+    .tool button {
+      margin-top: 10px;
+      background: #6954e8;
+      color: white;
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tool button:hover { background: #5140c8; }
+    .tool[hidden] { display: none; }
+    footer { text-align: center; padding: 25px; color: #818198; background: white; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">✦ ToolNest</div>
+    <a href="#tools">Explore tools ↓</a>
+  </header>
+
+  <section class="hero">
+    <h1>Useful tools. Made simple.</h1>
+    <p>Free online tools to help you get everyday tasks done faster.</p>
+    <input class="search" id="search" type="search"
+      placeholder="Search tools..." aria-label="Search tools">
+  </section>
+
+  <main id="tools">
+    <h2 class="section-title">Explore our tools</h2>
+    <p class="intro">Your handy little corner of the internet.</p>
+
+    <div class="tools" id="toolGrid">
+      <article class="tool" data-name="calculator">
+        <div class="tool-icon">🧮</div>
+        <h3>Calculator</h3>
+        <p>Perform quick everyday calculations.</p>
+        <button onclick="alert('Calculator is coming in our next build!')">Open tool</button>
+      </article>
+
+      <article class="tool" data-name="word counter">
+        <div class="tool-icon">📝</div>
+        <h3>Word Counter</h3>
+        <p>Count words and characters in your text.</p>
+        <button onclick="alert('Word Counter is coming in our next build!')">Open tool</button>
+      </article>
+
+      <article class="tool" data-name="qr code generator">
+        <div class="tool-icon">▦</div>
+        <h3>QR Code Generator</h3>
+        <p>Create QR codes for links and other text.</p>
+        <button onclick="alert('QR Generator is coming in our next build!')">Open tool</button>
+      </article>
+
+      <article class="tool" data-name="unit converter">
+        <div class="tool-icon">↔️</div>
+        <h3>Unit Converter</h3>
+        <p>Convert common measurements quickly.</p>
+        <button onclick="alert('Unit Converter is coming in our next build!')">Open tool</button>
+      </article>
+    </div>
+    <p id="empty" hidden>No tools match your search.</p>
+  </main>
+
+  <footer>© 2026 ToolNest · Free online tools for everyone</footer>
+
+  <script>
+    const search = document.getElementById('search');
+    const cards = document.querySelectorAll('.tool');
+    const empty = document.getElementById('empty');
+
+    search.addEventListener('input', () => {
+      const query = search.value.toLowerCase().trim();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const match = card.dataset.name.includes(query);
+        card.hidden = !match;
+        if (match) visible++;
+      });
+
+      empty.hidden = visible !== 0;
+    });
+  </script>
+</body>
+</html>
