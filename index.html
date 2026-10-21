@@ -105,7 +105,7 @@
         <div class="tool-icon">📝</div>
         <h3>Word Counter</h3>
         <p>Count words and characters in your text.</p>
-        <button onclick="alert('Word Counter is coming in our next build!')">Open tool</button>
+        <button onclick="openTool('wordcounter')">Open tool</button>
       </article>
 
       <article class="tool" data-name="qr code generator">
@@ -126,6 +126,44 @@
   </main>
 
   <footer>© 2026 ToolNest · Free online tools for everyone</footer>
+  
+<div id="wordModal" style="display:none;position:fixed;inset:0;background:#17152b99;z-index:9998;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:white;width:100%;max-width:500px;padding:24px;border-radius:20px;box-shadow:0 20px 60px #0003;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <h2 style="margin:0;">📝 Word Counter</h2>
+      <button onclick="closeWordCounter()" style="border:0;background:#eee;border-radius:8px;padding:8px 12px;cursor:pointer;">✕</button>
+    </div>
+
+    <textarea id="wordText" placeholder="Type or paste your text here..."
+      style="width:100%;height:180px;padding:14px;border:1px solid #ddd;border-radius:12px;resize:vertical;font:16px Arial,sans-serif;"></textarea>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px;">
+      <div style="background:#f0edff;padding:14px;border-radius:10px;">
+        <div style="color:#696980;font-size:13px;">Words</div>
+        <strong id="wordCount" style="font-size:24px;">0</strong>
+      </div>
+      <div style="background:#e8f7ef;padding:14px;border-radius:10px;">
+        <div style="color:#696980;font-size:13px;">Characters</div>
+        <strong id="charCount" style="font-size:24px;">0</strong>
+      </div>
+      <div style="background:#eaf3ff;padding:14px;border-radius:10px;">
+        <div style="color:#696980;font-size:13px;">No spaces</div>
+        <strong id="noSpaceCount" style="font-size:24px;">0</strong>
+      </div>
+      <div style="background:#fff0e5;padding:14px;border-radius:10px;">
+        <div style="color:#696980;font-size:13px;">Sentences</div>
+        <strong id="sentenceCount" style="font-size:24px;">0</strong>
+      </div>
+      <div style="background:#fff0f5;padding:14px;border-radius:10px;grid-column:span 2;">
+        <div style="color:#696980;font-size:13px;">Paragraphs</div>
+        <strong id="paragraphCount" style="font-size:24px;">0</strong>
+      </div>
+    </div>
+
+    <button onclick="clearWordCounter()" style="margin-top:16px;background:#6954e8;color:white;border:0;border-radius:9px;padding:12px 18px;cursor:pointer;font-weight:bold;">Clear text</button>
+  </div>
+</div>
+
       
 <div id="toolModal" style="display:none;position:fixed;inset:0;background:#17152b99;z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;width:100%;max-width:360px;padding:24px;border-radius:20px;box-shadow:0 20px 60px #0003;">
@@ -210,7 +248,48 @@ function openTool(name) {
     modal.style.display = 'flex';
   }
 }
+  
+function closeWordCounter() {
+  document.getElementById('wordModal').style.display = 'none';
+}
 
+function updateWordCounter() {
+  const text = document.getElementById('wordText').value;
+
+  const words = text.trim()
+    ? text.trim().split(/\s+/).length
+    : 0;
+
+  const sentences = text.trim()
+    ? (text.match(/[.!?]+(?=\s|$)/g) || []).length
+    : 0;
+
+  const paragraphs = text.trim()
+    ? text.trim().split(/\n\s*\n/).filter(p => p.trim()).length
+    : 0;
+
+  document.getElementById('wordCount').textContent = words;
+  document.getElementById('charCount').textContent = text.length;
+  document.getElementById('noSpaceCount').textContent =
+    text.replace(/\s/g, '').length;
+  document.getElementById('sentenceCount').textContent = sentences;
+  document.getElementById('paragraphCount').textContent = paragraphs;
+}
+
+function clearWordCounter() {
+  document.getElementById('wordText').value = '';
+  updateWordCounter();
+}
+
+document.getElementById('wordText').addEventListener(
+  'input',
+  updateWordCounter
+);
+  if (name === 'wordcounter') {
+    document.getElementById('wordText').value = '';
+    updateWordCounter();
+    document.getElementById('wordModal').style.display = 'flex';
+  }  
 function closeTool() {
   document.getElementById('toolModal').style.display = 'none';
 }
